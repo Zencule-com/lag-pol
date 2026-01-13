@@ -13,7 +13,7 @@ export default function ClientSignupSection({ preselectedCourse = "", variant = 
   const trainingScheduleOptions = [
     { value: 'Scrum Master: 2 en 3 maart in Utrecht', label: 'Scrum Master · 2 & 3 maart (Utrecht)' },
     { value: 'Product Owner: 20 en 21 april in Utrecht', label: 'Product Owner · 20 & 21 april (Utrecht)' },
-    { value: 'Gecombineerde PO/SM: 9-12 februari in Utrecht', label: 'Gecombineerde PO/SM · 9-12 februari (Utrecht)' },
+    { value: 'Gecombineerde PO/SM: 13-16 april in Utrecht', label: 'Gecombineerde PO/SM · 13-16 april (Utrecht)' },
     { value: 'Andere datum in overleg', label: 'Andere datum (in overleg)' },
   ];
   const [formData, setFormData] = useState({
