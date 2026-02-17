@@ -41,7 +41,7 @@ export default function CoursePageLayout({
       return [
         {
           courseName: 'Scrum Master',
-          dates: '2 & 3 maart',
+          dates: '7 & 9 april',
           location: 'Utrecht'
         }
       ];

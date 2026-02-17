@@ -46,8 +46,8 @@ export default function HeroSection({
   
   // Map training date display to form value
   const getTrainingDateValue = (date: { courseName: string; dates: string; location: string }) => {
-    if (date.courseName === 'Scrum Master' && date.dates === '2 & 3 maart') {
-      return 'Scrum Master: 2 en 3 maart in Utrecht';
+    if (date.courseName === 'Scrum Master' && date.dates === '7 & 9 april') {
+      return 'Scrum Master: 7 en 9 april in Utrecht';
     }
     if (date.courseName === 'Product Owner' && date.dates === '20 & 21 april') {
       return 'Product Owner: 20 en 21 april in Utrecht';
