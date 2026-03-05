@@ -250,7 +250,7 @@ export const productOwnerMetadata: CourseMetadata = {
 export const poPlusSmCourse: Course = {
   id: 'po-plus-sm',
   title: 'PO + SM',
-  duration: '3 dagen van 3,5 uur',
+  duration: '2 dagen van 3,5 uur',
   description: 'In deze training ontwikkelen Product Owners zich tot richtinggevende en waardegedreven leiders binnen hun team. Ze leren hoe wendbaar werken geen doel op zich is, maar een middel om sneller en beter bij te dragen aan resultaten die er écht toe doen.',
   detailedDescription: 'De focus ligt op het herkennen en realiseren van waarde in een complexe praktijk, waar prioriteiten constant verschuiven en samenwerken cruciaal is. Denk aan het versnellen van besluitvorming, het vergroten van eigenaarschap en het versterken van vertrouwen, binnen én buiten het team.',
   topics: [
@@ -281,7 +281,7 @@ export const poPlusSmCourse: Course = {
     'Je gaat aan de slag met je eigen Scrum Master in het team om te leren elkaar te versterken'
   ],
   details: {
-    duration: '3 dagen',
+    duration: '2 dagen',
     certificate: 'Bewijs van deelname',
     trainers: '1 vaste trainer die deelnemers ook na de opleiding coacht',
     materials: 'Trainingsmateriaal digitaal, inclusief digitale Politie Poker game'
@@ -311,7 +311,7 @@ export const poPlusSmCourse: Course = {
 
 export const poPlusSmMetadata: CourseMetadata = {
   title: 'PO + SM Training - Politie',
-  description: 'Ontwikkel je tot richtinggevende en waardegedreven leider. 3 dagen praktijkgerichte PO + SM training speciaal voor de politie.',
+  description: 'Ontwikkel je tot richtinggevende en waardegedreven leider. 2 dagen praktijkgerichte PO + SM training speciaal voor de politie.',
   keywords: [
     'PO + SM training politie',
     'Product Owner Scrum Master training',
@@ -321,7 +321,7 @@ export const poPlusSmMetadata: CourseMetadata = {
   ],
   openGraph: {
     title: 'PO + SM Training - Politie',
-    description: 'Ontwikkel je tot richtinggevende en waardegedreven leider. 3 dagen praktijkgerichte PO + SM training.',
+    description: 'Ontwikkel je tot richtinggevende en waardegedreven leider. 2 dagen praktijkgerichte PO + SM training.',
     type: 'website',
   },
 };

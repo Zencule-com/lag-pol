@@ -39,7 +39,7 @@ export default function PoPlusSmPage() {
       courses={courses}
       heroTitle="Product Owner & Samenwerking Scrum Master"
       heroSubtitle={
-        "Op dag 1 & 2 volg je de Product Owner training.\n\nOp dag 3 ga je aan de slag samen met je Scrum Master om dezelfde taal te leren spreken. Jullie weten hoe je samen richting geeft én ruimte laat, en hoe je bewuster stuurt op waarde, wendbaarheid en eigenaarschap in het team.\n\nJe gaat naar huis met een concreet actieplan waar je direct mee aan de slag kunt. En misschien wel het belangrijkste: jullie hebben elkaar echt gevonden als sparringpartner. Vanaf nu werken de Product Owner en Scrum Master niet naast elkaar, maar nog sterker mét elkaar."
+        "Op dag 1 volg je de Product Owner training.\n\nOp dag 2 ga je aan de slag samen met je Scrum Master om dezelfde taal te leren spreken. Jullie weten hoe je samen richting geeft én ruimte laat, en hoe je bewuster stuurt op waarde, wendbaarheid en eigenaarschap in het team.\n\nJe gaat naar huis met een concreet actieplan waar je direct mee aan de slag kunt. En misschien wel het belangrijkste: jullie hebben elkaar echt gevonden als sparringpartner. Vanaf nu werken de Product Owner en Scrum Master niet naast elkaar, maar nog sterker mét elkaar."
       }
       preselectedCourse="PO + SM / Beginner"
       relatedTraining={relatedTraining}

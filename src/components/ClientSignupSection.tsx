@@ -11,9 +11,11 @@ interface ClientSignupSectionProps {
 export default function ClientSignupSection({ preselectedCourse = "", variant = 'training' }: ClientSignupSectionProps) {
   const isTeamVariant = variant === 'team';
   const trainingScheduleOptions = [
-    { value: 'Scrum Master: 7 en 9 april in Utrecht', label: 'Scrum Master · 7 & 9 april (Utrecht)' },
+    { value: 'Scrum Master: 8 en 9 juni in Utrecht', label: 'Scrum Master · 8 & 9 juni (Utrecht)' },
     { value: 'Product Owner: 20 en 21 april in Utrecht', label: 'Product Owner · 20 & 21 april (Utrecht)' },
+    { value: 'Product Owner: 22 en 24 juni in Utrecht/Nieuwegein', label: 'Product Owner · 22 & 24 juni (Utrecht/Nieuwegein)' },
     { value: 'Gecombineerde PO/SM: 13-16 april in Utrecht', label: 'Gecombineerde PO/SM · 13-16 april (Utrecht)' },
+    { value: 'Agile Coach: 15, 16, 30 juni en 1 juli in Doorn', label: 'Agile Coach · 15, 16, 30 juni & 1 juli (Doorn)' },
     { value: 'Andere datum in overleg', label: 'Andere datum (in overleg)' },
   ];
   const [formData, setFormData] = useState({

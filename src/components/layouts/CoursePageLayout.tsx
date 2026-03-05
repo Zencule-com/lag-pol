@@ -41,7 +41,7 @@ export default function CoursePageLayout({
       return [
         {
           courseName: 'Scrum Master',
-          dates: '7 & 9 april',
+          dates: '8 & 9 juni',
           location: 'Utrecht'
         }
       ];
@@ -53,10 +53,25 @@ export default function CoursePageLayout({
           courseName: 'Product Owner',
           dates: '20 & 21 april',
           location: 'Utrecht'
+        },
+        {
+          courseName: 'Product Owner',
+          dates: '22 & 24 juni',
+          location: 'Utrecht/Nieuwegein'
         }
       ];
     }
     
+    if (courseId === 'agile-coach') {
+      return [
+        {
+          courseName: 'Agile Coach',
+          dates: '15, 16, 30 juni & 1 juli',
+          location: 'Doorn'
+        }
+      ];
+    }
+
     return undefined;
   };
 

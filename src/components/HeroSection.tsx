@@ -46,11 +46,17 @@ export default function HeroSection({
   
   // Map training date display to form value
   const getTrainingDateValue = (date: { courseName: string; dates: string; location: string }) => {
-    if (date.courseName === 'Scrum Master' && date.dates === '7 & 9 april') {
-      return 'Scrum Master: 7 en 9 april in Utrecht';
+    if (date.courseName === 'Scrum Master' && date.dates === '8 & 9 juni') {
+      return 'Scrum Master: 8 en 9 juni in Utrecht';
     }
     if (date.courseName === 'Product Owner' && date.dates === '20 & 21 april') {
       return 'Product Owner: 20 en 21 april in Utrecht';
+    }
+    if (date.courseName === 'Product Owner' && date.dates === '22 & 24 juni') {
+      return 'Product Owner: 22 en 24 juni in Utrecht/Nieuwegein';
+    }
+    if (date.courseName === 'Agile Coach' && date.dates === '15, 16, 30 juni & 1 juli') {
+      return 'Agile Coach: 15, 16, 30 juni en 1 juli in Doorn';
     }
     return '';
   };
