@@ -68,6 +68,11 @@ export default function CoursePageLayout({
           courseName: 'Agile Coach',
           dates: '15, 16, 30 juni & 1 juli',
           location: 'Doorn'
+        },
+        {
+          courseName: 'Agile Coach',
+          dates: '16, 17 september & 1, 2 oktober',
+          location: 'Doorn'
         }
       ];
     }

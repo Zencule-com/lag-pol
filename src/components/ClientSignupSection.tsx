@@ -16,6 +16,7 @@ export default function ClientSignupSection({ preselectedCourse = "", variant = 
     { value: 'Product Owner: 22 en 24 juni in Utrecht/Nieuwegein', label: 'Product Owner · 22 & 24 juni (Utrecht/Nieuwegein)' },
     { value: 'Gecombineerde PO/SM: 13-16 april in Utrecht', label: 'Gecombineerde PO/SM · 13-16 april (Utrecht)' },
     { value: 'Agile Coach: 15, 16, 30 juni en 1 juli in Doorn', label: 'Agile Coach · 15, 16, 30 juni & 1 juli (Doorn)' },
+    { value: 'Agile Coach: 16, 17 september en 1, 2 oktober in Doorn', label: 'Agile Coach · 16, 17 sept & 1, 2 okt (Doorn)' },
     { value: 'Andere datum in overleg', label: 'Andere datum (in overleg)' },
   ];
   const [formData, setFormData] = useState({

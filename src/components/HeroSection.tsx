@@ -58,6 +58,9 @@ export default function HeroSection({
     if (date.courseName === 'Agile Coach' && date.dates === '15, 16, 30 juni & 1 juli') {
       return 'Agile Coach: 15, 16, 30 juni en 1 juli in Doorn';
     }
+    if (date.courseName === 'Agile Coach' && date.dates === '16, 17 september & 1, 2 oktober') {
+      return 'Agile Coach: 16, 17 september en 1, 2 oktober in Doorn';
+    }
     return '';
   };
   return (
