@@ -157,8 +157,12 @@ export default function HeroSection({
                             <span className="font-medium">{date.courseName}</span>
                             {' · '}
                             <span>{date.dates}</span>
-                            {' · '}
-                            <span className="text-gray-600">({date.location})</span>
+                            {date.location && (
+                              <>
+                                {' · '}
+                                <span className="text-gray-600">({date.location})</span>
+                              </>
+                            )}
                           </div>
                         </div>
                       ))}

@@ -279,8 +279,8 @@ export function getTrainingDatesForCourse(
     const dates = formatTrainingDays(training);
     const location = simplifyLocation(training.location_naam || training.location_name || '');
 
-    const formValue = `${courseName}: ${dates} in ${location}`;
-    const formLabel = `${courseName} · ${dates} (${location})`;
+    const formValue = location ? `${courseName}: ${dates} in ${location}` : `${courseName}: ${dates}`;
+    const formLabel = location ? `${courseName} · ${dates} (${location})` : `${courseName} · ${dates}`;
 
     return {
       courseName,
@@ -307,8 +307,8 @@ export function getAllTrainingScheduleOptions(trainings: SasyTraining[]): { valu
     if (!dates) continue;
 
     options.push({
-      value: `${courseName}: ${dates} in ${location}`,
-      label: `${courseName} · ${dates} (${location})`,
+      value: location ? `${courseName}: ${dates} in ${location}` : `${courseName}: ${dates}`,
+      label: location ? `${courseName} · ${dates} (${location})` : `${courseName} · ${dates}`,
     });
   }
 
