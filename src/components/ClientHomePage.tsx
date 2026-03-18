@@ -8,7 +8,11 @@ import ClientSignupSection from './ClientSignupSection';
 import CardSwap, { Card } from './CardSwap';
 import Footer from './sections/Footer';
 
-export default function ClientHomePage() {
+interface ClientHomePageProps {
+  scheduleOptions?: { value: string; label: string }[];
+}
+
+export default function ClientHomePage({ scheduleOptions }: ClientHomePageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -547,7 +551,7 @@ export default function ClientHomePage() {
         </section>
         
         {/* Signup Section */}
-        <ClientSignupSection />
+        <ClientSignupSection scheduleOptions={scheduleOptions} />
 
 
         {/* Footer */}
