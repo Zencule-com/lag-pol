@@ -191,21 +191,25 @@ function formatTrainingDays(training: SasyTraining): string {
   const monthKeys = Object.keys(byMonth).map(Number).sort((a, b) => a - b);
 
   const parts: string[] = [];
+  const multipleMonths = monthKeys.length > 1;
+
   for (let i = 0; i < monthKeys.length; i++) {
     const monthIdx = monthKeys[i];
     const days = byMonth[monthIdx].sort((a, b) => a - b);
-    const isLast = i === monthKeys.length - 1;
 
-    if (isLast) {
-      // Last month: include day numbers and month name
-      parts.push(days.join(', ') + ' ' + months[monthIdx]);
+    // Format days: "8 & 9", "13, 15 & 16", "15, 16, 30"
+    let daysStr: string;
+    if (days.length === 1) {
+      daysStr = String(days[0]);
+    } else if (days.length === 2) {
+      daysStr = days[0] + ' & ' + days[1];
     } else {
-      // Not last: just day numbers (month will be implied or shown later)
-      parts.push(days.join(', '));
+      daysStr = days.slice(0, -1).join(', ') + ' & ' + days[days.length - 1];
     }
+
+    parts.push(daysStr + ' ' + months[monthIdx]);
   }
 
-  // Join with " & " for 2 parts, ", " and " & " for more
   if (parts.length === 1) return parts[0];
   if (parts.length === 2) return parts[0] + ' & ' + parts[1];
   return parts.slice(0, -1).join(', ') + ' & ' + parts[parts.length - 1];
@@ -237,6 +241,30 @@ function getShortCourseName(training: SasyTraining): string {
 }
 
 /**
+ * Simplify location to just the city name
+ * "Van Deventerlaan 50 te Utrecht (HUB50)" → "Utrecht"
+ * "Utrecht/ Nieuwegein" → "Utrecht/Nieuwegein"
+ * "Tilburg" → "Tilburg"
+ */
+function simplifyLocation(location: string): string {
+  if (!location || location === 'Politie' || location === 'onbekend') return '';
+
+  // Check for known city names
+  const cities = ['Utrecht', 'Nieuwegein', 'Doorn', 'Tilburg', 'Breda', 'Amsterdam', 'Den Haag', 'Rotterdam'];
+  const found: string[] = [];
+  for (const city of cities) {
+    if (location.toLowerCase().includes(city.toLowerCase()) && !found.includes(city)) {
+      found.push(city);
+    }
+  }
+
+  if (found.length > 0) return found.join('/');
+
+  // Fallback: return as-is
+  return location;
+}
+
+/**
  * Get formatted training dates for a specific course
  */
 export function getTrainingDatesForCourse(
@@ -249,7 +277,7 @@ export function getTrainingDatesForCourse(
   return matching.map(training => {
     const courseName = getShortCourseName(training);
     const dates = formatTrainingDays(training);
-    const location = training.location_naam || training.location_name || '';
+    const location = simplifyLocation(training.location_naam || training.location_name || '');
 
     const formValue = `${courseName}: ${dates} in ${location}`;
     const formLabel = `${courseName} · ${dates} (${location})`;
@@ -274,7 +302,7 @@ export function getAllTrainingScheduleOptions(trainings: SasyTraining[]): { valu
   for (const training of trainings) {
     const courseName = getShortCourseName(training);
     const dates = formatTrainingDays(training);
-    const location = training.location_naam || training.location_name || '';
+    const location = simplifyLocation(training.location_naam || training.location_name || '');
 
     if (!dates) continue;
 
