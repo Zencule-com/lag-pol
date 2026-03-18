@@ -6,21 +6,24 @@ import Link from 'next/link';
 interface ClientSignupSectionProps {
   preselectedCourse?: string;
   variant?: 'training' | 'team';
+  scheduleOptions?: { value: string; label: string }[];
 }
 
-export default function ClientSignupSection({ preselectedCourse = "", variant = 'training' }: ClientSignupSectionProps) {
+const fallbackScheduleOptions = [
+  { value: 'Scrum Master: 8 en 9 juni in Utrecht', label: 'Scrum Master · 8 & 9 juni (Utrecht)' },
+  { value: 'Product Owner: 20 en 21 april in Utrecht', label: 'Product Owner · 20 & 21 april (Utrecht)' },
+  { value: 'Product Owner: 22 en 24 juni in Utrecht/Nieuwegein', label: 'Product Owner · 22 & 24 juni (Utrecht/Nieuwegein)' },
+  { value: 'Gecombineerde PO/SM: 13, 15 en 16 april in Utrecht', label: 'Gecombineerde PO/SM · 13, 15 & 16 april (Utrecht)' },
+  { value: 'Agile Coach: 15, 16, 30 juni en 1 juli in Doorn', label: 'Agile Coach · 15, 16, 30 juni & 1 juli (Doorn)' },
+  { value: 'Agile Coach: 16, 17 september en 1, 2 oktober in Doorn', label: 'Agile Coach · 16, 17 sept & 1, 2 okt (Doorn)' },
+  { value: 'Obeya Facilitator: 23 juni en 6 juli in regio Tilburg/Breda', label: 'Obeya Facilitator · 23 juni & 6 juli (Tilburg/Breda)' },
+  { value: 'Obeya Facilitator: 14 en 28 september in Utrecht', label: 'Obeya Facilitator · 14 & 28 sept (Utrecht)' },
+  { value: 'Andere datum in overleg', label: 'Andere datum (in overleg)' },
+];
+
+export default function ClientSignupSection({ preselectedCourse = "", variant = 'training', scheduleOptions }: ClientSignupSectionProps) {
   const isTeamVariant = variant === 'team';
-  const trainingScheduleOptions = [
-    { value: 'Scrum Master: 8 en 9 juni in Utrecht', label: 'Scrum Master · 8 & 9 juni (Utrecht)' },
-    { value: 'Product Owner: 20 en 21 april in Utrecht', label: 'Product Owner · 20 & 21 april (Utrecht)' },
-    { value: 'Product Owner: 22 en 24 juni in Utrecht/Nieuwegein', label: 'Product Owner · 22 & 24 juni (Utrecht/Nieuwegein)' },
-    { value: 'Gecombineerde PO/SM: 13, 15 en 16 april in Utrecht', label: 'Gecombineerde PO/SM · 13, 15 & 16 april (Utrecht)' },
-    { value: 'Agile Coach: 15, 16, 30 juni en 1 juli in Doorn', label: 'Agile Coach · 15, 16, 30 juni & 1 juli (Doorn)' },
-    { value: 'Agile Coach: 16, 17 september en 1, 2 oktober in Doorn', label: 'Agile Coach · 16, 17 sept & 1, 2 okt (Doorn)' },
-    { value: 'Obeya Facilitator: 23 juni en 6 juli in regio Tilburg/Breda', label: 'Obeya Facilitator · 23 juni & 6 juli (Tilburg/Breda)' },
-    { value: 'Obeya Facilitator: 14 en 28 september in Utrecht', label: 'Obeya Facilitator · 14 & 28 sept (Utrecht)' },
-    { value: 'Andere datum in overleg', label: 'Andere datum (in overleg)' },
-  ];
+  const trainingScheduleOptions = scheduleOptions || fallbackScheduleOptions;
   const [formData, setFormData] = useState({
     name: '',
     email: '',

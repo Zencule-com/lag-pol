@@ -8,6 +8,7 @@ import PracticalDetailsSection from '../sections/PracticalDetailsSection';
 import PriceSection from '../sections/PriceSection';
 import RelatedTrainingSection from '../sections/RelatedTrainingSection';
 import Footer from '../sections/Footer';
+import { fetchPolitieTrainings, getTrainingDatesForCourse, getAllTrainingScheduleOptions } from '../../lib/trainings-api';
 
 interface CoursePageLayoutProps {
   courses: Course[];
@@ -25,60 +26,35 @@ interface CoursePageLayoutProps {
   };
 }
 
-export default function CoursePageLayout({
+export default async function CoursePageLayout({
   courses,
   heroTitle,
   heroSubtitle,
   preselectedCourse,
   relatedTraining
 }: CoursePageLayoutProps) {
-  // Determine training dates based on course
-  const getTrainingDates = (course: Course) => {
-    const courseId = course.id.toLowerCase();
-    const courseTitle = course.title.toLowerCase();
-    
-    if (courseId === 'basis' && courseTitle.includes('scrum master')) {
-      return [
-        {
-          courseName: 'Scrum Master',
-          dates: '8 & 9 juni',
-          location: 'Utrecht'
-        }
-      ];
-    }
-    
-    if (courseId === 'basis' && courseTitle.includes('product owner')) {
-      return [
-        {
-          courseName: 'Product Owner',
-          dates: '20 & 21 april',
-          location: 'Utrecht'
-        },
-        {
-          courseName: 'Product Owner',
-          dates: '22 & 24 juni',
-          location: 'Utrecht/Nieuwegein'
-        }
-      ];
-    }
-    
-    if (courseId === 'agile-coach') {
-      return [
-        {
-          courseName: 'Agile Coach',
-          dates: '15, 16, 30 juni & 1 juli',
-          location: 'Doorn'
-        },
-        {
-          courseName: 'Agile Coach',
-          dates: '16, 17 september & 1, 2 oktober',
-          location: 'Doorn'
-        }
-      ];
-    }
+  // Fetch politie trainings from Rico API
+  const allTrainings = await fetchPolitieTrainings();
 
-    return undefined;
+  // Get training dates for the current course
+  const getTrainingDates = (course: Course) => {
+    if (allTrainings.length === 0) return undefined;
+
+    const dates = getTrainingDatesForCourse(allTrainings, course.id, course.title);
+    if (dates.length === 0) return undefined;
+
+    return dates.map(d => ({
+      courseName: d.courseName,
+      dates: d.dates,
+      location: d.location,
+      formValue: d.formValue,
+    }));
   };
+
+  // Get all schedule options for the signup form
+  const scheduleOptions = allTrainings.length > 0
+    ? getAllTrainingScheduleOptions(allTrainings)
+    : undefined;
 
   return (
     <div className="min-h-screen bg-white">
@@ -87,7 +63,7 @@ export default function CoursePageLayout({
 
       {/* Hero Section */}
       {courses.map((course) => (
-        <HeroSection 
+        <HeroSection
           key={course.id}
           title={heroTitle}
           subtitle={heroSubtitle}
@@ -136,11 +112,11 @@ export default function CoursePageLayout({
       {courses.every(course => !course.price) && <PriceSection courses={courses} />}
 
       {/* Signup Section */}
-      <ClientSignupSection preselectedCourse={preselectedCourse} />
+      <ClientSignupSection preselectedCourse={preselectedCourse} scheduleOptions={scheduleOptions} />
 
       {/* Related Training Section */}
       {relatedTraining && (
-        <RelatedTrainingSection 
+        <RelatedTrainingSection
           title={relatedTraining.title}
           description={relatedTraining.description}
           links={relatedTraining.links}
