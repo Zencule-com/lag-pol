@@ -60,53 +60,78 @@ export async function fetchPolitieTrainings(): Promise<SasyTraining[]> {
 }
 
 /**
+ * Check if name contains "PO/SM" pattern (not just "po" which matches "politie")
+ */
+function isPOSM(name: string): boolean {
+  return /po\/sm|po\+sm|po \+ sm|gecombineerd/i.test(name);
+}
+
+/**
+ * Check if name contains "OF" prefix pattern for Obeya Facilitator
+ * Matches patterns like "Politie OF 2804" or "OF -"
+ */
+function isObeyaFacilitator(name: string): boolean {
+  return /\bOF\b/i.test(name) || /facilitator/i.test(name);
+}
+
+/**
  * Match a SASY training to a course page based on the training name/class
+ *
+ * Real SASY names look like:
+ *   "Politie 2631 PO/SM - Product Owner - April" (class: Product Owner) → PO+SM page
+ *   "Politie PO - 2634 - Product Owner - April" (class: Product Owner) → PO Basis page
+ *   "2de Politie SM 2742 - Scrum Master - Juni" (class: Scrum Master) → SM Basis page
+ *   "Politie PO 2786 - Agile Coach - Juni" (class: Agile Coach) → Agile Coach page
+ *   "Politie OF 2804 - Obeya - Juni" (class: Obeya) → Facilitator in Obeya page
  */
 function matchesCourse(training: SasyTraining, courseId: string, courseTitle: string): boolean {
-  const name = (training.training_naam || training.name || '').toLowerCase();
+  const name = training.training_naam || training.name || '';
   const cls = (training.class || '').toLowerCase();
   const titleLower = courseTitle.toLowerCase();
 
-  // Match based on course title keywords
+  // PO+SM — must match before Product Owner (since PO/SM has class "Product Owner")
+  if (titleLower.includes('po + sm') || titleLower.includes('po+sm')) {
+    return isPOSM(name);
+  }
+
+  // Scrum Master Basis
   if (titleLower.includes('scrum master') && titleLower.includes('basis')) {
-    return (name.includes('scrum master') && !name.includes('verdiep') && !name.includes('vervolg') && !name.includes('product owner')) ||
-           (cls.includes('scrum master') && !name.includes('verdiep') && !name.includes('vervolg') && !name.includes('product owner'));
+    return cls === 'scrum master' && !isPOSM(name);
   }
 
+  // Scrum Master Verdiept
   if (titleLower.includes('scrum master') && (titleLower.includes('verdiept') || titleLower.includes('vervolg'))) {
-    return name.includes('scrum master') && (name.includes('verdiep') || name.includes('vervolg'));
+    return cls === 'scrum master' && /verdiep|vervolg/i.test(name);
   }
 
-  if (titleLower.includes('po + sm') || titleLower.includes('po+sm') || (titleLower.includes('product owner') && titleLower.includes('scrum master'))) {
-    return name.includes('po') && name.includes('sm') ||
-           (name.includes('product owner') && name.includes('scrum master')) ||
-           name.includes('po+sm') || name.includes('po + sm') ||
-           name.includes('gecombineerd');
-  }
-
+  // Product Owner Basis
   if (titleLower.includes('product owner') && titleLower.includes('basis')) {
-    return (name.includes('product owner') && !name.includes('verdiep') && !name.includes('vervolg') && !name.includes('scrum master') && !name.includes('po+sm') && !name.includes('po + sm')) ||
-           (cls.includes('product owner') && !name.includes('verdiep') && !name.includes('vervolg') && !name.includes('scrum master'));
+    return cls === 'product owner' && !isPOSM(name) && !/verdiep|vervolg/i.test(name);
   }
 
+  // Product Owner Verdiept
   if (titleLower.includes('product owner') && (titleLower.includes('verdiept') || titleLower.includes('vervolg'))) {
-    return name.includes('product owner') && (name.includes('verdiep') || name.includes('vervolg'));
+    return cls === 'product owner' && /verdiep|vervolg/i.test(name);
   }
 
+  // Agile Coach
   if (titleLower.includes('agile coach')) {
-    return name.includes('agile coach') || cls.includes('agile coach');
+    return cls === 'agile coach';
   }
 
+  // Agile Leiderschap
   if (titleLower.includes('agile leiderschap')) {
-    return name.includes('agile leiderschap') || name.includes('agile leadership');
+    return /agile leiderschap|agile leadership/i.test(name) || cls === 'agile leiderschap';
   }
 
-  if (titleLower.includes('sturen met obeya') || titleLower.includes('leading with obeya')) {
-    return name.includes('sturen met obeya') || name.includes('leading with obeya') || name.includes('obeya kickstart');
-  }
-
+  // Facilitator in Obeya — "OF" in the name
   if (titleLower.includes('facilitator')) {
-    return name.includes('facilitator') && name.includes('obeya');
+    return cls === 'obeya' && isObeyaFacilitator(name);
+  }
+
+  // Sturen met Obeya / Leading with Obeya — Obeya class without "OF"
+  if (titleLower.includes('sturen met obeya') || titleLower.includes('leading with obeya')) {
+    return cls === 'obeya' && !isObeyaFacilitator(name);
   }
 
   return false;
@@ -190,17 +215,23 @@ function formatTrainingDays(training: SasyTraining): string {
  * Get the short course name for display
  */
 function getShortCourseName(training: SasyTraining): string {
-  const name = (training.training_naam || training.name || '').toLowerCase();
+  const name = training.training_naam || training.name || '';
+  const cls = (training.class || '').toLowerCase();
 
-  if (name.includes('scrum master') && (name.includes('verdiep') || name.includes('vervolg'))) return 'Scrum Master Verdiept';
-  if (name.includes('scrum master')) return 'Scrum Master';
-  if ((name.includes('po') && name.includes('sm')) || name.includes('gecombineerd')) return 'Gecombineerde PO/SM';
-  if (name.includes('product owner') && (name.includes('verdiep') || name.includes('vervolg'))) return 'Product Owner Verdiept';
-  if (name.includes('product owner')) return 'Product Owner';
-  if (name.includes('agile coach')) return 'Agile Coach';
-  if (name.includes('agile leiderschap') || name.includes('agile leadership')) return 'Agile Leiderschap';
-  if (name.includes('facilitator')) return 'Obeya Facilitator';
-  if (name.includes('obeya')) return 'Sturen met Obeya';
+  // PO/SM must be checked first (before Product Owner)
+  if (isPOSM(name)) return 'Gecombineerde PO/SM';
+
+  if (cls === 'scrum master') {
+    return /verdiep|vervolg/i.test(name) ? 'Scrum Master Verdiept' : 'Scrum Master';
+  }
+  if (cls === 'product owner') {
+    return /verdiep|vervolg/i.test(name) ? 'Product Owner Verdiept' : 'Product Owner';
+  }
+  if (cls === 'agile coach') return 'Agile Coach';
+  if (/agile leiderschap|agile leadership/i.test(name)) return 'Agile Leiderschap';
+  if (cls === 'obeya') {
+    return isObeyaFacilitator(name) ? 'Obeya Facilitator' : 'Sturen met Obeya';
+  }
 
   return training.class || 'Training';
 }
