@@ -283,6 +283,14 @@ function getEarliestDate(training: SasyTraining): string {
   return dates[0] || '9999-12-31';
 }
 
+function todayIso(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function isUpcoming(training: SasyTraining): boolean {
+  return getEarliestDate(training) >= todayIso();
+}
+
 export function getTrainingDatesForCourse(
   trainings: SasyTraining[],
   courseId: string,
@@ -290,6 +298,7 @@ export function getTrainingDatesForCourse(
 ): FormattedTrainingDate[] {
   const matching = trainings
     .filter(t => matchesCourse(t, courseId, courseTitle))
+    .filter(isUpcoming)
     .sort((a, b) => getEarliestDate(a).localeCompare(getEarliestDate(b)));
 
   return matching.map(training => {
@@ -317,7 +326,7 @@ export function getTrainingDatesForCourse(
 export function getAllTrainingScheduleOptions(trainings: SasyTraining[]): { value: string; label: string }[] {
   const options: { value: string; label: string }[] = [];
 
-  for (const training of trainings) {
+  for (const training of trainings.filter(isUpcoming)) {
     const courseName = getShortCourseName(training);
     const dates = formatTrainingDays(training);
     const location = simplifyLocation(training.location_naam || training.location_name || '');
