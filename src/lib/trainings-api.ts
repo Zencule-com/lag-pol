@@ -94,24 +94,19 @@ function matchesCourse(training: SasyTraining, courseId: string, courseTitle: st
     return isPOSM(name);
   }
 
-  // Scrum Master Basis
-  if (titleLower.includes('scrum master') && titleLower.includes('basis')) {
+  // Agile Leiderschap — name-based (no dedicated SASY class)
+  if (titleLower.includes('agile leiderschap')) {
+    return /agile leiderschap|agile leadership/i.test(name) || cls === 'agile leiderschap';
+  }
+
+  // Scrum Master (basis + vervolg share the same SASY class)
+  if (titleLower.includes('scrum master')) {
     return cls === 'scrum master' && !isPOSM(name);
   }
 
-  // Scrum Master Verdiept
-  if (titleLower.includes('scrum master') && (titleLower.includes('verdiept') || titleLower.includes('vervolg'))) {
-    return cls === 'scrum master' && /verdiep|vervolg/i.test(name);
-  }
-
-  // Product Owner Basis
-  if (titleLower.includes('product owner') && titleLower.includes('basis')) {
-    return cls === 'product owner' && !isPOSM(name) && !/verdiep|vervolg/i.test(name);
-  }
-
-  // Product Owner Verdiept
-  if (titleLower.includes('product owner') && (titleLower.includes('verdiept') || titleLower.includes('vervolg'))) {
-    return cls === 'product owner' && /verdiep|vervolg/i.test(name);
+  // Product Owner (basis + vervolg share the same SASY class, excluding PO/SM)
+  if (titleLower.includes('product owner')) {
+    return cls === 'product owner' && !isPOSM(name);
   }
 
   // Agile Coach
@@ -119,19 +114,9 @@ function matchesCourse(training: SasyTraining, courseId: string, courseTitle: st
     return cls === 'agile coach';
   }
 
-  // Agile Leiderschap
-  if (titleLower.includes('agile leiderschap')) {
-    return /agile leiderschap|agile leadership/i.test(name) || cls === 'agile leiderschap';
-  }
-
-  // Facilitator in Obeya — "OF" in the name
-  if (titleLower.includes('facilitator')) {
-    return cls === 'obeya' && isObeyaFacilitator(name);
-  }
-
-  // Sturen met Obeya / Leading with Obeya — Obeya class without "OF"
-  if (titleLower.includes('sturen met obeya') || titleLower.includes('leading with obeya')) {
-    return cls === 'obeya' && !isObeyaFacilitator(name);
+  // Obeya pages (Facilitator + Sturen/Leading share the same SASY class)
+  if (titleLower.includes('facilitator') || titleLower.includes('sturen met obeya') || titleLower.includes('leading with obeya') || titleLower.includes('obeya')) {
+    return cls === 'obeya';
   }
 
   return false;
