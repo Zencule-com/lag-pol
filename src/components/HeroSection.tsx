@@ -113,7 +113,23 @@ export default function HeroSection({
                     Prijs per deelnemer op basis van {price.baseParticipants} deelnemers
                   </div>
                 </div>
-                
+
+                {trainingDates && trainingDates.length > 0 && (
+                  <div className="text-center mb-6 pt-6 border-t border-gray-200">
+                    <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                      Eerstvolgende training
+                    </div>
+                    <div className="text-lg font-semibold text-gray-900">
+                      {trainingDates[0].dates}
+                      {trainingDates[0].location && (
+                        <span className="text-gray-600 font-normal">
+                          {' · '}{trainingDates[0].location}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 <div className="space-y-4 pt-6 border-t border-gray-200">
                   <div className="flex items-start">
                     <svg className="w-5 h-5 text-primary-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
