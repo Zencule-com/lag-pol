@@ -267,12 +267,30 @@ function simplifyLocation(location: string): string {
 /**
  * Get formatted training dates for a specific course
  */
+function getEarliestDate(training: SasyTraining): string {
+  const dates: string[] = [];
+  if (training.training_block) {
+    for (const block of training.training_block) {
+      if (block.training_day) {
+        for (const day of block.training_day) {
+          if (day.date) dates.push(day.date);
+        }
+      }
+    }
+  }
+  if (dates.length === 0 && training.start_date) dates.push(training.start_date);
+  dates.sort();
+  return dates[0] || '9999-12-31';
+}
+
 export function getTrainingDatesForCourse(
   trainings: SasyTraining[],
   courseId: string,
   courseTitle: string
 ): FormattedTrainingDate[] {
-  const matching = trainings.filter(t => matchesCourse(t, courseId, courseTitle));
+  const matching = trainings
+    .filter(t => matchesCourse(t, courseId, courseTitle))
+    .sort((a, b) => getEarliestDate(a).localeCompare(getEarliestDate(b)));
 
   return matching.map(training => {
     const courseName = getShortCourseName(training);
