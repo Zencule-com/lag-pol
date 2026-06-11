@@ -111,7 +111,7 @@ export default function Navigation({
       ),
       color: "primary",
       courses: [
-        { name: "Sturen met Obeya", link: "/leading-with-obeya", duration: "4 dagen" },
+        { name: "Sturen met Obeya", link: "/sturen-met-obeya", duration: "4 dagen" },
         { name: "Facilitator in Obeya", link: "/facilitator-in-obeya", duration: "2 dagen" }
       ]
     }

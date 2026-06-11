@@ -456,7 +456,7 @@ export const agileLeiderschapMetadata: CourseMetadata = {
 };
 
 export const leadingWithObeyaCourse: Course = {
-  id: 'leading-with-obeya',
+  id: 'sturen-met-obeya',
   title: 'Sturen met Obeya de team kickstart',
   description: 'Leer hoe je als managementteam effectief kunt werken met Obeya. Ontwikkel vaardigheden om strategie naar tactiek uitvoering te vertalen en teams te begeleiden naar betere resultaten.',
   duration: '4 dagdelen van 3,5 uur',

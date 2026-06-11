@@ -17,7 +17,7 @@ export default function AgileLeiderschapPage() {
         variant: "primary" as const
       },
       {
-        href: "/leading-with-obeya",
+        href: "/sturen-met-obeya",
         text: "Sturen met Obeya",
         variant: "primary" as const
       },

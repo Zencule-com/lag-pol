@@ -9,6 +9,15 @@ const nextConfig = {
   images: {
     formats: ['image/webp', 'image/avif'],
   },
+  async redirects() {
+    return [
+      {
+        source: '/leading-with-obeya',
+        destination: '/sturen-met-obeya',
+        permanent: true,
+      },
+    ]
+  },
   async headers() {
     return [
       {

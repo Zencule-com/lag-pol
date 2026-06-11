@@ -12,7 +12,7 @@ export default function FacilitatorInObeyaPage() {
     description: "Ontdek andere trainingen die perfect aansluiten bij jouw ontwikkeling.",
     links: [
       {
-        href: "/leading-with-obeya",
+        href: "/sturen-met-obeya",
         text: "Sturen met Obeya",
         variant: "primary" as const
       },

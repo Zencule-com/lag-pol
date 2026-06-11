@@ -47,7 +47,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
           priority: 0.8,
         },
         {
-          url: `${baseUrl}/leading-with-obeya`,
+          url: `${baseUrl}/sturen-met-obeya`,
           lastModified: new Date(),
           changeFrequency: 'monthly',
           priority: 0.8,

@@ -430,7 +430,7 @@ export default function ClientHomePage({ scheduleOptions }: ClientHomePageProps)
                 </div>
                 
                 <div className="space-y-3">
-                  <Link href="/leading-with-obeya" className="flex items-center justify-between bg-white/20 p-4 rounded-lg hover:bg-primary-500/30 hover:border-primary-400 border border-white/30 transition-all duration-200 group">
+                  <Link href="/sturen-met-obeya" className="flex items-center justify-between bg-white/20 p-4 rounded-lg hover:bg-primary-500/30 hover:border-primary-400 border border-white/30 transition-all duration-200 group">
                     <span className="font-medium text-white group-hover:text-primary-200">Sturen met Obeya</span>
                     <div className="flex items-center space-x-3">
                       <span className="text-sm bg-primary-500 text-white px-3 py-1 rounded-full font-medium">2 dagen</span>
