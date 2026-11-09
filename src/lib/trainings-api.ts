@@ -210,6 +210,12 @@ function getShortCourseName(training: SasyTraining): string {
   // PO/SM must be checked first (before Product Owner)
   if (isPOSM(name)) return 'Gecombineerde PO/SM';
 
+  // Verdiept runs sometimes come without a SASY class, so check the name first
+  if (/verdiep|vervolg/i.test(name)) {
+    if (cls === 'scrum master' || /scrum master/i.test(name)) return 'Scrum Master Verdiept';
+    if (cls === 'product owner' || /product owner/i.test(name)) return 'Product Owner Verdiept';
+  }
+
   if (cls === 'scrum master') {
     return /verdiep|vervolg/i.test(name) ? 'Scrum Master Verdiept' : 'Scrum Master';
   }
@@ -308,10 +314,21 @@ export function getTrainingDatesForCourse(
 /**
  * Get all training schedule options for the signup form dropdown
  */
-export function getAllTrainingScheduleOptions(trainings: SasyTraining[]): { value: string; label: string }[] {
-  const options: { value: string; label: string }[] = [];
+export interface ScheduleOption {
+  value: string;
+  label: string;
+  // Short course name (see getShortCourseName); absent for "Andere datum"
+  course?: string;
+}
 
-  for (const training of trainings.filter(isUpcoming)) {
+export function getAllTrainingScheduleOptions(trainings: SasyTraining[]): ScheduleOption[] {
+  const options: ScheduleOption[] = [];
+
+  const upcoming = trainings
+    .filter(isUpcoming)
+    .sort((a, b) => getEarliestDate(a).localeCompare(getEarliestDate(b)));
+
+  for (const training of upcoming) {
     const courseName = getShortCourseName(training);
     const dates = formatTrainingDays(training);
     const location = simplifyLocation(training.location_naam || training.location_name || '');
@@ -321,6 +338,7 @@ export function getAllTrainingScheduleOptions(trainings: SasyTraining[]): { valu
     options.push({
       value: location ? `${courseName}: ${dates} in ${location}` : `${courseName}: ${dates}`,
       label: location ? `${courseName} · ${dates} (${location})` : `${courseName} · ${dates}`,
+      course: courseName,
     });
   }
 

@@ -5,11 +5,12 @@ import Link from 'next/link';
 import ClickSpark from './ClickSpark';
 import Navigation from './Navigation';
 import ClientSignupSection from './ClientSignupSection';
+import type { ScheduleOption } from '../lib/trainings-api';
 import CardSwap, { Card } from './CardSwap';
 import Footer from './sections/Footer';
 
 interface ClientHomePageProps {
-  scheduleOptions?: { value: string; label: string }[];
+  scheduleOptions?: ScheduleOption[];
 }
 
 export default function ClientHomePage({ scheduleOptions }: ClientHomePageProps) {

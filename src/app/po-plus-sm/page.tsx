@@ -41,7 +41,7 @@ export default function PoPlusSmPage() {
       heroSubtitle={
         "Op dag 1 en 2 volg je de Product Owner training.\n\nOp dag 3 sluit je Scrum Master aan (om 13:00 uur) om samen dezelfde taal te leren spreken. Jullie weten hoe je samen richting geeft én ruimte laat, en hoe je bewuster stuurt op waarde, wendbaarheid en eigenaarschap in het team.\n\nJe gaat naar huis met een concreet actieplan waar je direct mee aan de slag kunt. En misschien wel het belangrijkste: jullie hebben elkaar echt gevonden als sparringpartner. Vanaf nu werken de Product Owner en Scrum Master niet naast elkaar, maar nog sterker mét elkaar."
       }
-      preselectedCourse="PO + SM / Beginner"
+      preselectedCourse="Product Owner ism Scrum Master / Beginner"
       relatedTraining={relatedTraining}
     />
   );

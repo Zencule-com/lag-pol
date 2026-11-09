@@ -2,23 +2,30 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import type { ScheduleOption } from '../lib/trainings-api';
 
 interface ClientSignupSectionProps {
   preselectedCourse?: string;
   variant?: 'training' | 'team';
-  scheduleOptions?: { value: string; label: string }[];
+  scheduleOptions?: ScheduleOption[];
 }
 
-const fallbackScheduleOptions = [
-  { value: 'Scrum Master: 8 en 9 juni in Utrecht', label: 'Scrum Master · 8 & 9 juni (Utrecht)' },
-  { value: 'Product Owner: 20 en 21 april in Utrecht', label: 'Product Owner · 20 & 21 april (Utrecht)' },
-  { value: 'Product Owner: 22 en 24 juni in Utrecht/Nieuwegein', label: 'Product Owner · 22 & 24 juni (Utrecht/Nieuwegein)' },
-  { value: 'Gecombineerde PO/SM: 13, 15 en 16 april in Utrecht', label: 'Gecombineerde PO/SM · 13, 15 & 16 april (Utrecht)' },
-  { value: 'Agile Coach: 15, 16, 30 juni en 1 juli in Doorn', label: 'Agile Coach · 15, 16, 30 juni & 1 juli (Doorn)' },
-  { value: 'Agile Coach: 16, 17 september en 1, 2 oktober in Doorn', label: 'Agile Coach · 16, 17 sept & 1, 2 okt (Doorn)' },
-  { value: 'Obeya Facilitator: 23 juni en 6 juli in regio Tilburg/Breda', label: 'Obeya Facilitator · 23 juni & 6 juli (Tilburg/Breda)' },
-  { value: 'Obeya Facilitator: 14 en 28 september in Utrecht', label: 'Obeya Facilitator · 14 & 28 sept (Utrecht)' },
+// Used when the Rico API is unreachable: no dates we cannot vouch for, only "in overleg"
+const fallbackScheduleOptions: ScheduleOption[] = [
   { value: 'Andere datum in overleg', label: 'Andere datum (in overleg)' },
+];
+
+// Training dropdown: form value -> short course name the schedule options carry
+const courseOptions: { value: string; label: string; course: string }[] = [
+  { value: 'Scrum Master Basis / Beginner', label: 'Scrum Master Basis', course: 'Scrum Master' },
+  { value: 'Scrum Master Verdiept / Gevorderd', label: 'Scrum Master Verdiept', course: 'Scrum Master Verdiept' },
+  { value: 'Product Owner Basis / Beginner', label: 'Product Owner Basis', course: 'Product Owner' },
+  { value: 'Product Owner Verdiept / Gevorderd', label: 'Product Owner Verdiept', course: 'Product Owner Verdiept' },
+  { value: 'Product Owner ism Scrum Master / Beginner', label: 'Product Owner ism Scrum Master', course: 'Gecombineerde PO/SM' },
+  { value: 'Agile Coach Opleiding', label: 'Agile Coach Opleiding', course: 'Agile Coach' },
+  { value: 'Agile Leiderschap Opleiding', label: 'Agile Leiderschap Opleiding', course: 'Agile Leiderschap' },
+  { value: 'Sturen met Obeya', label: 'Sturen met Obeya', course: 'Sturen met Obeya' },
+  { value: 'Facilitator in Obeya', label: 'Facilitator in Obeya', course: 'Obeya Facilitator' },
 ];
 
 export default function ClientSignupSection({ preselectedCourse = "", variant = 'training', scheduleOptions }: ClientSignupSectionProps) {
@@ -37,6 +44,36 @@ export default function ClientSignupSection({ preselectedCourse = "", variant = 
     message: '',
     privacyAccepted: false
   });
+
+  // Only the dates of the chosen training (plus "in overleg"); everything when none is chosen yet
+  const selectedCourse = courseOptions.find(c => c.value === formData.course)?.course;
+  const visibleScheduleOptions = selectedCourse
+    ? trainingScheduleOptions.filter(o => !o.course || o.course === selectedCourse)
+    : trainingScheduleOptions;
+  const hasDatesForCourse = visibleScheduleOptions.some(o => o.course);
+
+  const handleCourseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const course = e.target.value;
+    const short = courseOptions.find(c => c.value === course)?.course;
+    setFormData(prev => {
+      const date = trainingScheduleOptions.find(o => o.value === prev.trainingDate);
+      // Drop a date that belongs to another training
+      const keepDate = !date || !date.course || !short || date.course === short;
+      return { ...prev, course, trainingDate: keepDate ? prev.trainingDate : '' };
+    });
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const trainingDate = e.target.value;
+    const date = trainingScheduleOptions.find(o => o.value === trainingDate);
+    setFormData(prev => {
+      // Picking a date before a training fills in the training
+      const course = !prev.course && date?.course
+        ? courseOptions.find(c => c.course === date.course)?.value ?? prev.course
+        : prev.course;
+      return { ...prev, trainingDate, course };
+    });
+  };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -306,20 +343,16 @@ export default function ClientSignupSection({ preselectedCourse = "", variant = 
                       id="course"
                       name="course"
                       value={formData.course}
-                      onChange={handleInputChange}
+                      onChange={handleCourseChange}
                       required
                       className="w-full px-4 py-3 border border-white/30 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white/10 text-white placeholder-gray-300"
                     >
                       <option value="" className="bg-gray-800 text-white">Selecteer training</option>
-                      <option value="Scrum Master Basis / Beginner">Scrum Master Basis</option>
-                      <option value="Scrum Master Verdiept / Gevorderd">Scrum Master Verdiept</option>
-                      <option value="Product Owner Basis / Beginner">Product Owner Basis</option>
-                      <option value="Product Owner Verdiept">Product Owner Verdiept</option>
-                      <option value="Product Owner ism Scrum Master / Beginner">Product Owner ism Scrum Master</option>
-                      <option value="Agile Coach Opleiding">Agile Coach Opleiding</option>
-                      <option value="Agile Leiderschap Opleiding">Agile Leiderschap Opleiding</option>
-                      <option value="Sturen met Obeya">Sturen met Obeya</option>
-                      <option value="Facilitator in Obeya">Facilitator in Obeya</option>
+                      {courseOptions.map((option) => (
+                        <option key={option.value} value={option.value} className="bg-gray-800 text-white">
+                          {option.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div>
@@ -330,17 +363,22 @@ export default function ClientSignupSection({ preselectedCourse = "", variant = 
                       id="trainingDate"
                       name="trainingDate"
                       value={formData.trainingDate}
-                      onChange={handleInputChange}
+                      onChange={handleDateChange}
                       required
                       className="w-full px-4 py-3 border border-white/30 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm bg-white/10 text-white placeholder-gray-300"
                     >
                       <option value="" className="bg-gray-800 text-white">Selecteer datum</option>
-                      {trainingScheduleOptions.map((option) => (
+                      {visibleScheduleOptions.map((option) => (
                         <option key={option.value} value={option.value} className="bg-gray-800 text-white">
                           {option.label}
                         </option>
                       ))}
                     </select>
+                    {selectedCourse && !hasDatesForCourse && (
+                      <p className="mt-2 text-xs text-gray-300">
+                        Voor deze training staat nog geen datum gepland. Kies &quot;Andere datum (in overleg)&quot;, dan nemen we contact met je op.
+                      </p>
+                    )}
                   </div>
                 </div>
 

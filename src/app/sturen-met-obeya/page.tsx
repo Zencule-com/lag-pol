@@ -34,7 +34,7 @@ export default function LeadingWithObeyaPage() {
       courses={courses}
       heroTitle="Sturen met Obeya de team kickstart"
       heroSubtitle="Leer hoe je als managementteam effectief kunt werken met Obeya. Ontwikkel vaardigheden om strategie naar tactiek te vertalen en teams te begeleiden naar betere resultaten."
-      preselectedCourse="Sturen met Obeya de team kickstart"
+      preselectedCourse="Sturen met Obeya"
       relatedTraining={relatedTraining}
     />
   );
