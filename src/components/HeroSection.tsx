@@ -1,5 +1,7 @@
 'use client';
 
+import type { ReactNode } from 'react';
+
 interface HeroSectionProps {
   title: string;
   subtitle: string;
@@ -20,6 +22,7 @@ interface HeroSectionProps {
     location: string;
     formValue?: string;
   }[];
+  aside?: ReactNode;
 }
 
 export default function HeroSection({ 
@@ -28,7 +31,8 @@ export default function HeroSection({
   className = "",
   price,
   courseDetails,
-  trainingDates
+  trainingDates,
+  aside
 }: HeroSectionProps) {
   const handleScrollToSignup = () => {
     const signupSection = document.getElementById('signup-section');
@@ -142,6 +146,13 @@ export default function HeroSection({
                 </div>
                 
               </div>
+            </div>
+          )}
+
+          {/* Right column - Custom content */}
+          {!price && aside && (
+            <div className="lg:flex lg:justify-end">
+              {aside}
             </div>
           )}
         </div>
